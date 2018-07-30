@@ -1,2 +1,4 @@
-db_user='alfresco'
-db_password='test123'
+db_user='root'
+db_password='sqlr00t'
+
+test=False
