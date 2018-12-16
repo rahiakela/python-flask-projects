@@ -25,7 +25,7 @@ class AddUpdateDelete():
         return db.session.commit()
 
 
-class MessageModel(db.Model, AddUpdateDelete):
+class Message(db.Model, AddUpdateDelete):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(250), unique=True, nullable=False)
     duration = db.Column(db.Integer, nullable=False)
@@ -33,7 +33,7 @@ class MessageModel(db.Model, AddUpdateDelete):
     category_id = db.Column(db.Integer, db.ForeignKey('category.id', ondelete='CASCADE'), nullable=False)
     category = db.relationship('Category', backref=db.backref('messages', lazy='dynamic', order_by='Message.message'))
     printed_times = db.Column(db.Integer, server_default='0', nullable=False)
-    printed_once = db.Column(db.Boolean, server_default='false', nullable=False)
+    printed_once = db.Column(db.Boolean, server_default='0', nullable=False)
 
     def __init__(self, message, duration, category):
         self.message = message

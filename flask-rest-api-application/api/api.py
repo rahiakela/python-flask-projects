@@ -6,7 +6,7 @@ Author: Rahi Akela - rahi.akela@yahoo.com
 from flask import Flask
 from flask_restful import fields, Resource, abort, marshal_with, reqparse, Api
 import status
-from models import MessageModel
+from models import Message
 from datetime import datetime
 from pytz import utc
 
@@ -46,7 +46,8 @@ message_manager = MessageManager()
 
 class Message(Resource):
     def abort_if_message_doesnt_exist(self, id):
-        abort(status.HTTP_404_NOT_FOUND, message="Message {0} doesn't exist".format(id))
+        if id not in message_manager:
+            abort(status.HTTP_404_NOT_FOUND, message="Message {0} doesn't exist".format(id))
 
     @marshal_with(message_fields)
     def get(self, id):
@@ -94,7 +95,7 @@ class MessageList(Resource):
         parser.add_argument('duration', type=int, required=True, help='Duration cannot be blank!')
         parser.add_argument('message_category', type=str, required=True, help='Message category cannot be blank!')
         args = parser.parse_args()
-        message = MessageModel(
+        message = Message(
             message=args['message'],
             duration=args['duration'],
             creation_date=datetime.now(utc),
