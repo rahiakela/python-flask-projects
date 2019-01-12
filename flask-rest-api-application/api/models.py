@@ -40,6 +40,16 @@ class Message(db.Model, AddUpdateDelete):
         self.duration = duration
         self.category = category
 
+    @classmethod
+    def is_unique(clazz, id, message):
+        existing_message = clazz.query.filter_by(message=message).first()
+        if existing_message is None:
+            return True
+        else:
+            if existing_message.id == id:
+                return True
+            else:
+                return False
 
 class Category(db.Model, AddUpdateDelete):
     id = db.Column(db.Integer, primary_key=True)
@@ -48,6 +58,16 @@ class Category(db.Model, AddUpdateDelete):
     def __init__(self, name):
         self.name = name
 
+    @classmethod
+    def is_unique(clazz, id, name):
+        existing_category = clazz.query.filter_by(name=name).first()
+        if existing_category is None:
+            return True
+        else:
+            if existing_category.id == id:
+                return True
+            else:
+                return False
 
 class CategorySchema(ma.Schema):
     id = fields.Integer(dump_only=True)
